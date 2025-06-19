@@ -32,9 +32,20 @@ ALLOWED_HOSTS = [
     'vscode-internal-40-beta.beta01.cloud.kavia.ai',
 ]
 
-# Application definition
+# --- CORS configuration for local dev and production ---
+#
+# 1. Make sure 'django-cors-headers' is installed:
+#    pip install django-cors-headers
+#
+# 2. If you see an import error for 'corsheaders', run:
+#    pip install django-cors-headers
+#
+# 3. For production, restrict origins using CORS_ALLOWED_ORIGINS
+#    instead of CORS_ALLOW_ALL_ORIGINS.
+#    See: https://pypi.org/project/django-cors-headers/
 
 INSTALLED_APPS = [
+    'corsheaders',  # Keep before other apps that might use CORS
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -43,11 +54,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'drf_yasg',
-    'corsheaders',
 ]
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',  # Must be at the top, before CommonMiddleware
     'django.middleware.common.CommonMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -130,8 +140,23 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# --- CORS configuration ---
+# For development, you can allow all origins for ease of frontend-backend integration.
+# WARNING: Never use CORS_ALLOW_ALL_ORIGINS=True in PRODUCTION!
 CORS_ALLOW_ALL_ORIGINS = True
+
+# For PRODUCTION, uncomment the following and comment out CORS_ALLOW_ALL_ORIGINS above!
+# CORS_ALLOW_ALL_ORIGINS = False
+# CORS_ALLOWED_ORIGINS = [
+#     "https://streamshop.example.com",     # Replace with your production frontend domain
+# ]
+
+# For development, restrict to local frontend if desired:
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-    "https://vscode-internal-40-beta.beta01.cloud.kavia.ai",  # as appropriate
+    "http://localhost:3000",  # React frontend dev server
+    # Add additional allowed dev/test origins here as needed.
+    # "https://vscode-internal-40-beta.beta01.cloud.kavia.ai",
 ]
+
+# Additional CORS security settings can be customized as needed.
+# See https://pypi.org/project/django-cors-headers/ for details.
