@@ -1,0 +1,4 @@
+{
+    "command": "source venv/bin/activate && python manage.py migrate && python manage.py runserver 0.0.0.0:<port>",
+    "working_directory": "/home/kavia/workspace/code-generation/streamshop-hub-9883-448bac89/streamshop_hub_backend"
+}
